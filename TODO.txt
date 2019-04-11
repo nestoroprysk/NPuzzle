@@ -1,2 +1,11 @@
-Understand the subject
+1. research Dijkstra's algorithm and its variations [Nestor]
+2. research A* algorithm and its variations [Sasha]
+3. research heuristic functions of A* [Sasha]
+4. research how to use A* algorithm for the project [Nestor]
+5. research when the puzzle is unsolvable [Sasha]
+6. research data structures for A* [Nestor]
+7. research uniform-cost searches [Nestor]
+8. research greedy searches [Sasha]
 
+9. configure CMake [Nestor]
+10. implement running python generator and input parsing [Sasha]
