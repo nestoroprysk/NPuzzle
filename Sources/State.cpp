@@ -4,7 +4,7 @@
 State::State(std::string const& i_init_state)
 {
 	m_array = Parser::parse(i_init_state);
-	m_empty_point = getPointEmpty();
+	m_moving_point = getPointEmpty();
 }
 
 State::State(Matrix const& m_array, Move i_move)
@@ -14,7 +14,9 @@ State::State(Matrix const& m_array, Move i_move)
 
 auto State::getAllNeighbours() -> std::vector<State>
 {
-	return {};
+	std::vector<State> neighbours;
+
+	neighbours.push_back(State(m_array, Left))
 }
 
 bool State::operator<(State const& i_rhs) const
@@ -30,7 +32,7 @@ bool State::operator==(State const& i_rhs) const
 }
 
 
-void State::setEmptyPoint()
+void State::setMovingPoint()
 {
 	auto n = m_array.m_data.size();
 
@@ -39,7 +41,7 @@ void State::setEmptyPoint()
 			if (m_array.m_data[i][j] == 0)
 			{
 				m_array.m_data[i][j] = n;
-				m_empty_point = {i , j};
+				m_moving_point = {i , j};
 			}
 	throw std::logic_error("Empty point not found");
 }

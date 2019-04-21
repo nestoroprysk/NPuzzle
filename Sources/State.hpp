@@ -15,9 +15,9 @@ public:
 	bool operator==(State const& i_rhs) const;
 private:
 	Matrix const m_array;
-	Point const m_empty_point;
+	Point const m_moving_point;
 	std::shared_ptr<const State> mp_prev;
 	std::size_t m_nb_steps_taken = 0;
 
-	void setEmptyPoint();
+	void setMovingPoint();
 };
