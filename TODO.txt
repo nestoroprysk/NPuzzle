@@ -6,6 +6,5 @@
 6. research data structures for A* [Nestor]
 7. research uniform-cost searches [Nestor]
 8. research greedy searches [Sasha]
-
 9. configure CMake [Nestor]
 10. implement running python generator and input parsing [Sasha]

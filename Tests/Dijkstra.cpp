@@ -1,8 +1,8 @@
-#include "gtest/gtest.h"
+#include "catch.hpp"
 
 #include "Dijkstra.hpp"
 
-TEST(basicTests, True)
-{
-	EXPECT_EQ(Dijkstra::magic(), 42);
+TEST_CASE( "Factorials are computed", "[factorial]" ) {
+    REQUIRE( Dijkstra::magic() == 42 );
+    REQUIRE( Dijkstra::magic() == 0 );
 }
