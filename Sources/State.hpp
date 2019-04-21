@@ -2,6 +2,7 @@
 
 #include "SquareMatrix.hpp"
 #include "Move.hpp"
+#include "Point.hpp"
 #include <vector>
 
 class State
@@ -14,6 +15,9 @@ public:
 	bool operator==(State const& i_rhs) const;
 private:
 	SquareMatrix const m_array;
+	Point const m_moving_point;
 	std::shared_ptr<const State> mp_prev;
 	std::size_t m_nb_steps_taken = 0;
+
+	void setMovingPoint();
 };
