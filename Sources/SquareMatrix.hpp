@@ -2,9 +2,9 @@
 
 #include <vector>
 
-struct Matrix
+struct SquareMatrix
 {
 	std::vector<std::vector<std::size_t>> m_data;
 	std::string toString() const;
-	bool operator==(Matrix const& i_rhs) const;
+	bool operator==(SquareMatrix const& i_rhs) const;
 };

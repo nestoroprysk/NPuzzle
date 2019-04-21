@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Matrix.hpp"
+#include "SquareMatrix.hpp"
 #include <string>
 
 namespace Parser {
 
-Matrix parse(std::string const& i_init_state);
+SquareMatrix parse(std::string const& i_init_state);
 
 } // namespace Parser

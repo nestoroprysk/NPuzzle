@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Move.hpp"
-#include "Matrix.hpp"
+#include "SquareMatrix.hpp"
 #include <vector>
 
 namespace ResultChecker {
@@ -11,6 +11,6 @@ struct Result
 	bool m_valid = true;
 };
 
-Result checkResult(Matrix const& i_init_state, std::vector<Move> const& i_moves);
+Result checkResult(SquareMatrix const& i_init_state, std::vector<Move> const& i_moves);
 
 } // namespace ResultChecker

@@ -5,8 +5,12 @@
 
 TEST_CASE("StateContainer", "[BasicTests]")
 {
-	const auto s = "random";
-	State dummy(s);
+	State dummy(R"( 4
+		1  2 3 10
+		33 2 5 10
+		12 3 5 10
+		33 2 5 10
+	)");
 	StateContainer sc;
 	REQUIRE(sc.empty());
 	REQUIRE_THROWS_WITH(sc.remove(dummy), "Trying to delete a non-existing node");
@@ -16,4 +20,5 @@ TEST_CASE("StateContainer", "[BasicTests]")
 	REQUIRE(sc.contains(dummy));
 	REQUIRE(sc.getBestState() == dummy);
 	REQUIRE_NOTHROW(sc.remove(dummy));
+	REQUIRE(!sc.contains(dummy));
 }

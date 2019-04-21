@@ -2,12 +2,13 @@
 #include "Parser.hpp"
 
 State::State(std::string const& i_init_state)
+	: m_array(Parser::parse(i_init_state))
 {
 	m_array = Parser::parse(i_init_state);
 	m_moving_point = getPointEmpty();
 }
 
-State::State(Matrix const& m_array, Move i_move)
+State::State(SquareMatrix const& i_init_state, Move i_move)
 {
 
 }
