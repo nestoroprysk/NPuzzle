@@ -13,7 +13,7 @@ TEST_CASE("StateContainer", "[BasicTests]")
 	REQUIRE_NOTHROW(sc.add(dummy));
 	REQUIRE_THROWS_WITH(sc.add(dummy), "Trying to insert an existing node");
 	REQUIRE(!sc.empty());
-	REQUIRE(sc.contails(dummy));
+	REQUIRE(sc.contains(dummy));
 	REQUIRE(sc.getBestState() == dummy);
 	REQUIRE_NOTHROW(sc.remove(dummy));
 }
