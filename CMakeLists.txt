@@ -29,7 +29,8 @@ set(TestsDir ${CMAKE_CURRENT_SOURCE_DIR}/Tests)
 file(GLOB TestsSources  ${TestsDir}/main.cpp
 						${TestsDir}/TestsUtils.hpp
 						${TestsDir}/catch.hpp
-						${TestsDir}/Parser.cpp)
+						${TestsDir}/Parser.cpp
+						${TestsDir}/StateContainer.cpp)
 
 add_executable(Tests ${TestsSources})
 

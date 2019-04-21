@@ -1,16 +1,16 @@
 #pragma once
 
 #include "State.hpp"
-#include <vector>
+#include <set>
 
 class StateContainer
 {
 public:
-	void add();
-	void remove();
+	void add(State const&);
+	void remove(State const&);
 	bool empty() const;
-	bool contains() const;
+	bool contains(State const&) const;
 	State const& getBestState() const;
 private:
-	std::vector<State> m_states;
+	std::set<State> m_states;
 };

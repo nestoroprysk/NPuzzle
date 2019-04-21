@@ -11,8 +11,8 @@ auto Solver::solve(std::string const& i_file_content) -> Result
 	// 	const auto& e = opened_states.getBestState();
 	// 	if (success(e))
 	// 		success = true;
-	// 	opened_states.remove(e);
 	// 	closed_states.add(e);
+	// 	opened_states.remove(e);
 	// 	for (auto const& n : e.getAllNeighbours()){
 	// 		if (!opened_states.contains(n) && !closed_states.contains(n))
 	// 			opened_states.add(n);
