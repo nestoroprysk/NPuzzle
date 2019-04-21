@@ -2,9 +2,10 @@
 #include <sstream>
 #include <iostream>
 
-Matrix Parser::parse(std::string const& i_init_state)
+SquareMatrix Parser::parse(std::string const& i_init_state)
 {
-	Matrix result;
+	// TODO: error handling
+	SquareMatrix result;
 
 	std::stringstream ss;
 	std::size_t n;

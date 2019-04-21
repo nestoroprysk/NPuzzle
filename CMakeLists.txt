@@ -10,8 +10,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(NPuzzleDir ${CMAKE_CURRENT_SOURCE_DIR}/Sources)
 file(GLOB NPuzzleSources	${NPuzzleDir}/Move.hpp
-							${NPuzzleDir}/Matrix.cpp
-							${NPuzzleDir}/Matrix.hpp
+							${NPuzzleDir}/SquareMatrix.cpp
+							${NPuzzleDir}/SquareMatrix.hpp
 							${NPuzzleDir}/Parser.cpp
 							${NPuzzleDir}/Parser.hpp
 							${NPuzzleDir}/ResultChecker.cpp
