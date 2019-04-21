@@ -1,0 +1,4 @@
+/Users/omykolai/NPuzzle/Build/CMakeFiles/Tests.dir
+/Users/omykolai/NPuzzle/Build/CMakeFiles/rebuild_cache.dir
+/Users/omykolai/NPuzzle/Build/CMakeFiles/edit_cache.dir
+/Users/omykolai/NPuzzle/Build/CMakeFiles/NPuzzle.dir
