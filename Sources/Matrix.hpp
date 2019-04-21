@@ -5,4 +5,6 @@
 struct Matrix
 {
 	std::vector<std::vector<std::size_t>> m_data;
+
+	std::string toString() const;
 };
