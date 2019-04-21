@@ -20,6 +20,11 @@ auto State::getAllNeighbours() -> std::vector<State>
 	neighbours.push_back(State(m_array, Left))
 }
 
+void getMovingPoint()
+{
+
+}
+
 bool State::operator<(State const& i_rhs) const
 {
 	return m_nb_steps_taken < i_rhs.m_nb_steps_taken;
@@ -32,17 +37,26 @@ bool State::operator==(State const& i_rhs) const
 		m_nb_steps_taken == i_rhs.m_nb_steps_taken;
 }
 
+void State::getMovingPoint()
+{
+	return m_moving_point;
+}
 
 void State::setMovingPoint()
 {
 	auto n = m_array.m_data.size();
 
 	for(auto i = 0; i < n; i++)
+	{
 		for (auto j = 0; j < n; j++)
+		{
 			if (m_array.m_data[i][j] == 0)
 			{
-				m_array.m_data[i][j] = n;
+				m_array.m_data[i][j] = n * n;
 				m_moving_point = {i , j};
+				return;
 			}
+		}
+	}
 	throw std::logic_error("Empty point not found");
 }
