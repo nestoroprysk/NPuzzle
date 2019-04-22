@@ -5,6 +5,6 @@
 
 namespace Parser {
 
-SquareMatrix parse(std::string const& i_init_state);
+SquareMatrix parse(std::string const& i_content);
 
 } // namespace Parser

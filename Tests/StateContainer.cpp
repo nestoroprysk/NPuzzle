@@ -5,11 +5,13 @@
 
 TEST_CASE("StateContainer", "[BasicTests]")
 {
-	State dummy(R"( 4
-		1  2 3 10
-		33 2 5 10
-		12 3 5 10
-		33 2 5 10
+	State dummy(
+		R"(
+			# This puzzle is solvable
+			3
+			8 4 6
+			2 0 5
+			3 7 1
 	)");
 	StateContainer sc;
 	REQUIRE(sc.empty());
