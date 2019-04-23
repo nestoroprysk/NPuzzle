@@ -2,8 +2,7 @@
 
 #include "StateContainer.hpp"
 
-
-TEST_CASE("StateContainer", "[BasicTests]")
+TEST_CASE("StateContainer")
 {
 	State dummy(
 		R"(
@@ -20,7 +19,11 @@ TEST_CASE("StateContainer", "[BasicTests]")
 	REQUIRE_THROWS_WITH(sc.add(dummy), "Trying to insert an existing node");
 	REQUIRE(!sc.empty());
 	REQUIRE(sc.contains(dummy));
-	REQUIRE(sc.getBestState() == dummy);
+	REQUIRE(sc.getBestState().m_matrix == dummy.m_matrix);
 	REQUIRE_NOTHROW(sc.remove(dummy));
 	REQUIRE(!sc.contains(dummy));
+	REQUIRE_NOTHROW(sc.add(dummy));
+	REQUIRE(sc.contains(dummy));
+	REQUIRE_NOTHROW(sc.clear());
+	REQUIRE(sc.empty());
 }

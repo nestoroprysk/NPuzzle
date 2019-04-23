@@ -4,6 +4,7 @@
 #include "Move.hpp"
 #include "Point.hpp"
 #include <vector>
+#include <optional>
 
 struct State
 {
@@ -11,6 +12,9 @@ struct State
 	State(SquareMatrix const& i_init_state, Move i_move);
 	auto getAllNeighbours() const -> std::vector<State>;
 	bool operator<(State const& i_rhs) const;
-	bool operator==(State const& i_rhs) const;
-	SquareMatrix const m_matrix;
+	using PredecessorRef = std::reference_wrapper<State const>;
+	using MaybePredecessor = std::optional<PredecessorRef>;
+	SquareMatrix m_matrix;
+	mutable MaybePredecessor m_opt_predecessor;
+	mutable std::size_t m_path_cost = 0;
 };

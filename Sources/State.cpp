@@ -13,17 +13,14 @@ State::State(SquareMatrix const& i_matrix, Move i_move)
 
 auto State::getAllNeighbours() const -> std::vector<State>
 {
-	// TODO: implement
-	return {};
+	std::vector<State> result;
+	auto const ms = MoveUtils::possibleMoves(m_matrix);
+	for (auto const m : ms)
+		result.emplace_back(m_matrix, m);
+	return result;
 }
 
 bool State::operator<(State const& i_rhs) const
 {
-	// TODO: implement
-	return false;
-}
-
-bool State::operator==(State const& i_rhs) const
-{
-	return m_matrix == i_rhs.m_matrix;
+	return m_path_cost < i_rhs.m_path_cost;
 }

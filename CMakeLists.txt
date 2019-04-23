@@ -9,7 +9,8 @@ set(CMAKE_CXX_STANDARD 17)
 # npuzzle library
 
 set(NPuzzleDir ${CMAKE_CURRENT_SOURCE_DIR}/Sources)
-file(GLOB NPuzzleSources	${NPuzzleDir}/Move.cpp
+file(GLOB NPuzzleSources	${NPuzzleDir}/Utils.hpp
+							${NPuzzleDir}/Move.cpp
 							${NPuzzleDir}/Move.hpp
 							${NPuzzleDir}/Point.hpp
 							${NPuzzleDir}/SquareMatrix.cpp
@@ -33,7 +34,10 @@ file(GLOB TestsSources  ${TestsDir}/main.cpp
 						${TestsDir}/TestsUtils.hpp
 						${TestsDir}/catch.hpp
 						${TestsDir}/Parser.cpp
-						${TestsDir}/StateContainer.cpp)
+						${TestsDir}/StateContainer.cpp
+						${TestsDir}/ResultChecker.cpp
+						${TestsDir}/Solver.cpp
+						${TestsDir}/Move.cpp)
 
 add_executable(Tests ${TestsSources})
 

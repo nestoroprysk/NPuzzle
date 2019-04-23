@@ -1,15 +1,23 @@
 #pragma once
 
+#include "Move.hpp"
+#include "StateContainer.hpp"
 #include <string>
+#include <optional>
+#include <list>
 
-namespace Solver {
-
-struct Result
+class Solver
 {
-	bool m_success = false;
-	// TODO: add path
+public:
+	Solver() = delete;
+	using Result = std::list<Move>;
+	using MaybeResult = std::optional<Result>;
+	static MaybeResult solve(std::string const& i_file_content);
+private:
+	static void visit(State const& i_state, State const& i_parent);
+	static void clear();
+	static auto collect(State const& i_state) -> Result;
+private:
+	static StateContainer m_opened_states;
+	static StateContainer m_closed_states;
 };
-
-Result solve(std::string const& i_file_content);
-
-} // namespace Solver

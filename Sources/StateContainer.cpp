@@ -25,6 +25,11 @@ bool StateContainer::contains(State const& i_rhs) const
 	return m_states.find(i_rhs) != m_states.end();
 }
 
+void StateContainer::clear()
+{
+	m_states.clear();
+}
+
 State const& StateContainer::getBestState() const
 {
 	if (empty())

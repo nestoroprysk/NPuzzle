@@ -2,7 +2,8 @@
 
 #include "Move.hpp"
 #include "SquareMatrix.hpp"
-#include <vector>
+#include "Parser.hpp"
+#include <list>
 
 namespace ResultChecker {
 
@@ -13,6 +14,6 @@ struct Result
 	bool m_valid = true;
 };
 
-Result checkResult(SquareMatrix const& i_matrix, std::vector<Move> const& i_moves, std::size_t i_i = 0);
+Result checkResult(SquareMatrix const& i_matrix, std::list<Move> const& i_moves);
 
 } // namespace ResultChecker

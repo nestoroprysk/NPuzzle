@@ -49,3 +49,11 @@ SquareMatrix MoveUtils::move(SquareMatrix const& i_matrix, Move i_move)
 			throw std::logic_error("Impossible move");
 	}
 }
+
+Move MoveUtils::infereMove(SquareMatrix const& i_from, SquareMatrix const& i_to)
+{
+	for (auto const m : MoveUtils::possibleMoves(i_from))
+		if (MoveUtils::move(i_from, m) == i_to)
+			return m;
+	throw std::logic_error("Impossible to reach the state in a single move");
+}
