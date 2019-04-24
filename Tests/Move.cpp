@@ -144,3 +144,17 @@ TEST_CASE("Corners")
 		REQUIRE_THROWS_WITH(MoveUtils::move(e, Move::Left), "Invalid move");
 	}
 }
+
+TEST_CASE("Possible moves")
+{
+	const auto s =
+		R"(
+			# This puzzle is solvable
+			3
+			3 4 8
+			2 0 5
+			7 6 1
+		)";
+	const auto e = Parser::parse(s);
+	REQUIRE(MoveUtils::possibleMoves(e).size() == 4);
+}

@@ -16,5 +16,6 @@ namespace SquareMatrixUtils {
 
 std::size_t biggest(SquareMatrix const& i_matrix);
 Point biggestCoordinates(SquareMatrix const& i_matrix);
+bool sorted(SquareMatrix const& i_matrix);
 
 } // namespace SquareMatrixUtils

@@ -1,5 +1,6 @@
 #include "StateContainer.hpp"
 
+#include "State.hpp"
 #include <string>
 
 void StateContainer::add(State const& i_state)

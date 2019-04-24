@@ -1,5 +1,7 @@
 #include "catch.hpp"
 
+#include "Parser.hpp"
+#include "State.hpp"
 #include "ResultChecker.hpp"
 
 TEST_CASE("ResultChecker")

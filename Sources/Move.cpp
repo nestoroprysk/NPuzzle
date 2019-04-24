@@ -50,7 +50,7 @@ SquareMatrix MoveUtils::move(SquareMatrix const& i_matrix, Move i_move)
 	}
 }
 
-Move MoveUtils::infereMove(SquareMatrix const& i_from, SquareMatrix const& i_to)
+Move MoveUtils::inferMove(SquareMatrix const& i_from, SquareMatrix const& i_to)
 {
 	for (auto const m : MoveUtils::possibleMoves(i_from))
 		if (MoveUtils::move(i_from, m) == i_to)

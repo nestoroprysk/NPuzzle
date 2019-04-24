@@ -1,29 +1,20 @@
 #include "ResultChecker.hpp"
+#include "State.hpp"
 
 namespace {
 
 using It = std::list<Move>::const_iterator;
 
-auto checkResultImpl(SquareMatrix const& i_matrix, It const& i_it, It const& i_end) -> ResultChecker::Result
+auto checkResultImpl(State const& i_state, It const& i_it, It const& i_end) -> ResultChecker::Result
 {
 	if (i_it == i_end)
-		return {ResultChecker::sorted(i_matrix)};
-	return checkResultImpl(MoveUtils::move(i_matrix, *i_it), std::next(i_it), i_end);
+		return {i_state.isSolution()};
+	return checkResultImpl(i_state.getNeighbour(*i_it), std::next(i_it), i_end);
 }
 
 } // namespace anonymous
 
-bool ResultChecker::sorted(SquareMatrix const& i_matrix)
+auto ResultChecker::checkResult(State const& i_state, std::list<Move> const& i_moves) -> Result
 {
-	auto c = 0;
-	for (auto const& row : i_matrix.m_data)
-		for (auto n : row)
-			if (n != ++c)
-				return false;
-	return true;
-}
-
-auto ResultChecker::checkResult(SquareMatrix const& i_matrix, std::list<Move> const& i_moves) -> Result
-{
-	return checkResultImpl(i_matrix, i_moves.cbegin(), i_moves.cend());
+	return checkResultImpl(i_state, i_moves.cbegin(), i_moves.cend());
 }

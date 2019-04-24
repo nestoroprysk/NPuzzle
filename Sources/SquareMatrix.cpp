@@ -32,3 +32,13 @@ Point SquareMatrixUtils::biggestCoordinates(SquareMatrix const& i_matrix)
 				return {i, j};
 	throw std::logic_error("No biggest: validation error");
 }
+
+bool SquareMatrixUtils::sorted(SquareMatrix const& i_matrix)
+{
+	auto c = 0;
+	for (auto const& row : i_matrix.m_data)
+		for (auto n : row)
+			if (n != ++c)
+				return false;
+	return true;
+}

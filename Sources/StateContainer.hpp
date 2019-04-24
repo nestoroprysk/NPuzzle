@@ -1,7 +1,8 @@
 #pragma once
 
-#include "State.hpp"
 #include <set>
+
+struct State;
 
 class StateContainer
 {

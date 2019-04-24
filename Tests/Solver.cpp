@@ -1,5 +1,6 @@
 #include "catch.hpp"
 
+#include "State.hpp"
 #include "Parser.hpp"
 #include "ResultChecker.hpp"
 #include "Solver.hpp"
@@ -16,7 +17,7 @@ TEST_CASE("Solver")
 			4 5 6
 			7 8 0
 		)";
-		const auto opt_solution = Solver::solve(str);
+		const auto opt_solution = Solver::solve(Parser::parse(str));
 		REQUIRE(opt_solution);
 		REQUIRE(ResultChecker::checkResult(Parser::parse(str), *opt_solution).m_valid);
 	}
@@ -30,7 +31,7 @@ TEST_CASE("Solver")
 			4 5 6
 			7 0 8
 		)";
-		const auto opt_solution = Solver::solve(str);
+		const auto opt_solution = Solver::solve(Parser::parse(str));
 		REQUIRE(opt_solution);
 		REQUIRE(ResultChecker::checkResult(Parser::parse(str), *opt_solution).m_valid);
 	}
@@ -44,7 +45,7 @@ TEST_CASE("Solver")
 			6 0 1
 			5 7 4
 		)";
-		const auto opt_solution = Solver::solve(str);
+		const auto opt_solution = Solver::solve(Parser::parse(str));
 		REQUIRE(opt_solution);
 		REQUIRE(ResultChecker::checkResult(Parser::parse(str), *opt_solution).m_valid);
 	}
@@ -58,7 +59,7 @@ TEST_CASE("Solver")
 			8 1 5
 			7 3 0
 		)";
-		const auto opt_solution = Solver::solve(str);
+		const auto opt_solution = Solver::solve(Parser::parse(str));
 		REQUIRE(!opt_solution);
 	}
 }
