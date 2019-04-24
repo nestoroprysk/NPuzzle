@@ -42,3 +42,14 @@ bool SquareMatrixUtils::sorted(SquareMatrix const& i_matrix)
 				return false;
 	return true;
 }
+
+std::size_t SquareMatrixUtils::sortedness(SquareMatrix const& i_matrix)
+{
+	auto result = 0;
+	auto c = 0;
+	for (auto const& row : i_matrix.m_data)
+		for (auto n : row)
+			if (const auto delta = n - ++c)
+				result += delta < 0 ? -delta : delta;
+	return result;
+}

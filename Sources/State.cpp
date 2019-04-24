@@ -49,5 +49,6 @@ std::size_t& State::cost() const
 
 bool State::operator<(State const& i_rhs) const
 {
-	return m_path_cost < i_rhs.m_path_cost;
+	return m_path_cost + SquareMatrixUtils::sortedness(m_matrix) <
+			i_rhs.m_path_cost + SquareMatrixUtils::sortedness(i_rhs.m_matrix);
 }
