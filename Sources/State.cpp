@@ -3,13 +3,13 @@
 namespace {
 
 	std::list<Move> collectMovesImpl(State const& i_state,
-			State::MaybePredecessor const& i_predecessor,
+			State::MaybePredecessor const& i_opt_predecessor,
 			std::list<Move> o_result = std::list<Move>())
 	{
-		if (const auto& opt_c = i_state.getPredecessor())
+		if (i_opt_predecessor)
 		{
-			o_result.push_front(MoveUtils::inferMove(opt_c->getMatrix(), i_state.getMatrix()));
-			return collectMovesImpl(*opt_c, opt_c->getPredecessor(), std::move(o_result));
+			o_result.push_front(MoveUtils::inferMove(i_opt_predecessor->getMatrix(), i_state.getMatrix()));
+			return collectMovesImpl(*i_opt_predecessor, i_opt_predecessor->getPredecessor(), std::move(o_result));
 		}
 		return o_result;
 	}
@@ -80,5 +80,7 @@ std::size_t& State::cost() const
 
 bool State::operator==(State const& i_rhs) const
 {
-	return i_rhs.m_matrix == m_matrix;
+	return i_rhs.m_matrix == m_matrix &&
+		m_opt_predecessor == i_rhs.m_opt_predecessor &&
+			m_path_cost == i_rhs.m_path_cost;
 }

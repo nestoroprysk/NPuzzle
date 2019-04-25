@@ -25,8 +25,8 @@ auto Solver::solve(State const& i_state) -> MaybeResult
 		m_closed_states.add(e);
 		const auto ns = e.getAllNeighbours();
 		m_opened_states.remove(e);
-		std::for_each(ns.cbegin(), ns.cend(),
-			[&e](auto const& n){visit(n, e);});
+		for (auto const& n : ns)
+			visit(n, e);
 	}
 	return {};
 }
@@ -35,8 +35,8 @@ void Solver::visit(State const& i_state, State const& i_parent)
 {
 	if (!m_opened_states.contains(i_state) && !m_closed_states.contains(i_state))
 	{
-		m_opened_states.add(i_state);
 		i_state.setPredecessor(i_parent);
+		m_opened_states.add(i_state);
 	}
 	else
 	{
