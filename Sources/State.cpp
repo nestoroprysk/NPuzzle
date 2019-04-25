@@ -1,5 +1,21 @@
 #include "State.hpp"
 
+namespace {
+
+	std::list<Move> collectMovesImpl(State const& i_state,
+			State::MaybePredecessor const& i_predecessor,
+			std::list<Move> o_result = std::list<Move>())
+	{
+		if (const auto& opt_c = i_state.getPredecessor())
+		{
+			o_result.push_front(MoveUtils::inferMove(opt_c->get().getMatrix(), i_state.getMatrix()));
+			return collectMovesImpl(*opt_c, opt_c->get().getPredecessor(), std::move(o_result));
+		}
+		return o_result;
+	}
+
+} // namespace anonymous
+
 State::State(SquareMatrix const& i_matrix)
 		: m_matrix(i_matrix)
 {
@@ -26,10 +42,7 @@ State State::getNeighbour(Move const& i_move) const
 
 auto State::collectMoves() const -> std::list<Move>
 {
-	std::list<Move> result;
-	while (auto opt_c = m_opt_predecessor)
-		result.push_front(MoveUtils::inferMove(opt_c->get().m_matrix, m_matrix));
-	return result;
+	return collectMovesImpl(*this, m_opt_predecessor);
 }
 
 bool State::isSolution() const
@@ -40,6 +53,16 @@ bool State::isSolution() const
 void State::setPredecessor(State const& i_parent) const
 {
 	m_opt_predecessor = i_parent;
+}
+
+auto State::getPredecessor() const -> MaybePredecessor const&
+{
+	return m_opt_predecessor;
+}
+
+SquareMatrix const& State::getMatrix() const
+{
+	return m_matrix;
 }
 
 std::size_t& State::cost() const
