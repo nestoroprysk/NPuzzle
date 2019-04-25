@@ -8,8 +8,8 @@ namespace {
 	{
 		if (const auto& opt_c = i_state.getPredecessor())
 		{
-			o_result.push_front(MoveUtils::inferMove(opt_c->get().getMatrix(), i_state.getMatrix()));
-			return collectMovesImpl(*opt_c, opt_c->get().getPredecessor(), std::move(o_result));
+			o_result.push_front(MoveUtils::inferMove(opt_c->getMatrix(), i_state.getMatrix()));
+			return collectMovesImpl(*opt_c, opt_c->getPredecessor(), std::move(o_result));
 		}
 		return o_result;
 	}
@@ -23,6 +23,14 @@ State::State(SquareMatrix const& i_matrix)
 
 State::State(SquareMatrix&& i_matrix)
 	: m_matrix(std::move(i_matrix))
+{
+}
+
+// TODO: delete the copy constructor after optimizing
+State::State(State const& i_other)
+	: m_matrix(i_other.m_matrix)
+	, m_opt_predecessor(i_other.m_opt_predecessor)
+	, m_path_cost(i_other.m_path_cost)
 {
 }
 
@@ -52,7 +60,7 @@ bool State::isSolution() const
 
 void State::setPredecessor(State const& i_parent) const
 {
-	m_opt_predecessor = i_parent;
+	m_opt_predecessor = std::make_shared<State>(i_parent);
 }
 
 auto State::getPredecessor() const -> MaybePredecessor const&
@@ -70,8 +78,7 @@ std::size_t& State::cost() const
 	return m_path_cost;
 }
 
-bool State::operator<(State const& i_rhs) const
+bool State::operator==(State const& i_rhs) const
 {
-	return m_path_cost + SquareMatrixUtils::sortedness(m_matrix) <
-			i_rhs.m_path_cost + SquareMatrixUtils::sortedness(i_rhs.m_matrix);
+	return i_rhs.m_matrix == m_matrix;
 }

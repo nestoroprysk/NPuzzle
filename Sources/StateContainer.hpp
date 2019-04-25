@@ -1,6 +1,6 @@
 #pragma once
 
-#include <set>
+#include <list>
 
 struct State;
 
@@ -12,7 +12,7 @@ public:
 	bool empty() const;
 	bool contains(State const&) const;
 	void clear();
-	State const& getBestState() const;
+	State getBestState() const;
 private:
-	std::set<State> m_states;
+	std::list<State> m_states;
 };

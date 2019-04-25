@@ -3,17 +3,19 @@
 #include "State.hpp"
 #include <string>
 
+// TODO: optimize so as to add not a copy
 void StateContainer::add(State const& i_state)
 {
-	if (!m_states.insert(i_state).second)
+	if (contains(i_state))
 		throw std::logic_error("Trying to insert an existing node");
+	m_states.push_back(i_state);
 }
 
 void StateContainer::remove(State const& i_state)
 {
-	if (m_states.find(i_state) == m_states.end())
+	if (!contains(i_state))
 		throw std::logic_error("Trying to delete a non-existing node");
-	m_states.erase(i_state);
+	m_states.remove(i_state);
 }
 
 bool StateContainer::empty() const
@@ -23,7 +25,8 @@ bool StateContainer::empty() const
 
 bool StateContainer::contains(State const& i_rhs) const
 {
-	return m_states.find(i_rhs) != m_states.end();
+	return std::any_of(m_states.cbegin(), m_states.cend(),
+			[&](auto const& i_state){ return i_state == i_rhs; });
 }
 
 void StateContainer::clear()
@@ -31,7 +34,8 @@ void StateContainer::clear()
 	m_states.clear();
 }
 
-State const& StateContainer::getBestState() const
+// TODO: optimize so as to return not a copy
+State StateContainer::getBestState() const
 {
 	if (empty())
 		throw std::logic_error("No best state in an empty container");

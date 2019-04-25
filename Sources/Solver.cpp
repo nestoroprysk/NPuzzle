@@ -19,7 +19,7 @@ auto Solver::solve(State const& i_state) -> MaybeResult
 	m_opened_states.add(i_state);
 	while (!m_opened_states.empty())
 	{
-		const auto& e = m_opened_states.getBestState();
+		const auto e = m_opened_states.getBestState();
 		if (e.isSolution())
 			return {e.collectMoves()};
 		m_closed_states.add(e);

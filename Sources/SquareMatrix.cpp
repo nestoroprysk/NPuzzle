@@ -25,7 +25,6 @@ std::size_t SquareMatrixUtils::biggest(SquareMatrix const& i_matrix)
 
 Point SquareMatrixUtils::biggestCoordinates(SquareMatrix const& i_matrix)
 {
-	Point result;
 	for (std::size_t i = 0; i < i_matrix.m_n; ++i)
 		for (std::size_t j = 0; j < i_matrix.m_n; ++j)
 			if (i_matrix.m_data[i][j] == biggest(i_matrix))
@@ -41,15 +40,4 @@ bool SquareMatrixUtils::sorted(SquareMatrix const& i_matrix)
 			if (n != ++c)
 				return false;
 	return true;
-}
-
-std::size_t SquareMatrixUtils::sortedness(SquareMatrix const& i_matrix)
-{
-	auto result = 0;
-	auto c = 0;
-	for (auto const& row : i_matrix.m_data)
-		for (auto n : row)
-			if (const auto delta = n - ++c)
-				result += delta < 0 ? -delta : delta;
-	return result;
 }
