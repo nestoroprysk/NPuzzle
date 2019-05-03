@@ -3,22 +3,6 @@
 
 namespace {
 
-std::size_t sortedness(State const& i_state)
-{
-    std::size_t result = 0;
-    std::size_t c = 1;
-    const auto& matrix = Utils::getMatrixRepository().at(i_state.getId());
-    for (auto const& row : matrix.m_data)
-    {
-        for (auto n : row)
-        {
-            const auto diff = n - c;
-            result += (diff < 0 ? -diff : diff);
-            ++c;
-        }
-    }
-    return result;
-}
 
 } // namespace anonymous
 
@@ -73,14 +57,19 @@ State::Id State::getId() const
     return m_id;
 }
 
-bool State::operator==(State const& i_rhs) const
+std::size_t StateUtils::sortedness(State const& i_state)
 {
-	return Utils::getMatrixRepository().at(m_id) ==
-	    Utils::getMatrixRepository().at(i_rhs.m_id);
-}
-
-bool State::operator<(State const& i_rhs) const
-{
-    return sortedness(Utils::getMatrixRepository().at(m_id)) <
-            sortedness(Utils::getMatrixRepository().at(i_rhs.m_id));
+    std::size_t result = 0;
+    std::size_t c = 1;
+    const auto& matrix = Utils::getMatrixRepository().at(i_state.getId());
+    for (auto const& row : matrix.m_data)
+    {
+        for (auto n : row)
+        {
+            const auto diff = n - c;
+            result += (diff < 0 ? -diff : diff);
+            ++c;
+        }
+    }
+    return result;
 }

@@ -20,9 +20,13 @@ public:
     auto getPredecessor() const -> MaybePredecessor;
     SquareMatrix const& getMatrix() const;
     Id getId() const;
-    bool operator==(State const& i_rhs) const;
-    bool operator<(State const& i_rhs) const;
 private:
     mutable MaybePredecessor m_opt_predecessor;
     std::size_t m_id = -1;
 };
+
+namespace StateUtils {
+
+    std::size_t sortedness(State const& i_state);
+
+} // namespace StateUtils
