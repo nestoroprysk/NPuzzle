@@ -16,16 +16,14 @@ TEST_CASE("StateContainer")
 	)"));
 	StateContainer sc;
 	REQUIRE(sc.empty());
-	REQUIRE_THROWS_WITH(sc.remove(dummy), "Trying to delete a non-existing node");
-	REQUIRE_NOTHROW(sc.add(dummy));
-	REQUIRE_THROWS_WITH(sc.add(dummy), "Trying to insert an existing node");
+	REQUIRE_THROWS_WITH(sc.pop(), "Trying to delete a non-existing node");
+	REQUIRE_NOTHROW(sc.push(dummy));
+	REQUIRE_THROWS_WITH(sc.push(dummy), "Trying to insert an existing node");
 	REQUIRE(!sc.empty());
 	REQUIRE(sc.contains(dummy));
 	REQUIRE(sc.getBestState().getMatrix() == dummy.getMatrix());
-	REQUIRE_NOTHROW(sc.remove(dummy));
+	REQUIRE_NOTHROW(sc.pop());
 	REQUIRE(!sc.contains(dummy));
-	REQUIRE_NOTHROW(sc.add(dummy));
+	REQUIRE_NOTHROW(sc.push(dummy));
 	REQUIRE(sc.contains(dummy));
-	REQUIRE_NOTHROW(sc.clear());
-	REQUIRE(sc.empty());
 }

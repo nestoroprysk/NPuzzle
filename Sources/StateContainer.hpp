@@ -3,20 +3,21 @@
 #include "State.hpp"
 
 #include <optional>
-#include <vector>
+#include <queue>
+#include <set>
 
 class StateContainer
 {
 public:
     using MaybeState = std::optional<State>;
-	void add(State);
-	void remove(State const&);
+	void push(State);
+	void pop();
 	bool empty() const;
 	bool contains(State const&) const;
-	auto find(State const& i_rhs) const -> MaybeState;
-	void clear();
 	State getBestState() const;
 	std::size_t size() const;
+    std::set<State::Id> const& getIds() const;
 private:
-	std::vector<State> m_states;
+	std::priority_queue<State> m_states;
+	std::set<State::Id> m_ids;
 };

@@ -3,25 +3,20 @@
 #include "State.hpp"
 #include <string>
 
-void StateContainer::add(State i_state)
+void StateContainer::push(State i_state)
 {
-	if (contains(i_state))
+	if (m_ids.find(i_state.getId()) != m_ids.cend())
 		throw std::logic_error("Trying to insert an existing node");
-	m_states.push_back(std::move(i_state));
+	m_ids.insert(i_state.getId());
+	m_states.push(std::move(i_state));
 }
 
-void StateContainer::remove(State const& i_state)
+void StateContainer::pop()
 {
-	if (!contains(i_state))
+	if (m_states.empty())
 		throw std::logic_error("Trying to delete a non-existing node");
-    for (auto i = 0; i < m_states.size(); ++i)
-    {
-        if (m_states[i] == i_state)
-        {
-            m_states.erase(m_states.begin() + i);
-            break;
-        }
-    }
+	m_ids.erase(m_states.top().getId());
+    m_states.pop();
 }
 
 bool StateContainer::empty() const
@@ -31,30 +26,22 @@ bool StateContainer::empty() const
 
 bool StateContainer::contains(State const& i_rhs) const
 {
-    return find(i_rhs) != std::nullopt;
-}
-
-auto StateContainer::find(State const& i_rhs) const -> MaybeState
-{
-    for (auto const& state : m_states)
-        if (state == i_rhs)
-            return state;
-    return {};
-}
-
-void StateContainer::clear()
-{
-	m_states.clear();
+    return m_ids.find(i_rhs.getId()) != m_ids.cend();
 }
 
 State StateContainer::getBestState() const
 {
 	if (empty())
 		throw std::logic_error("No best state in an empty container");
-	return *m_states.cbegin();
+	return m_states.top();
 }
 
 std::size_t StateContainer::size() const
 {
     return m_states.size();
+}
+
+std::set<State::Id> const& StateContainer::getIds() const
+{
+    return m_ids;
 }

@@ -4,6 +4,8 @@
 #include "Utils.hpp"
 #include "Move.hpp"
 
+#include <fstream>
+
 namespace {
 
     std::list<Move> collectMovesImpl(State const& i_state,
@@ -23,10 +25,30 @@ namespace {
         return collectMovesImpl(i_state, i_state.getPredecessor());
     }
 
+    static std::ofstream g_log("log.txt");
+
+    void dump(State const& i_state)
+    {
+        static std::size_t i = 0;
+        g_log << ++i << std::endl;
+        g_log << SquareMatrixUtils::toString(i_state.getMatrix()) << std::endl;
+    }
+
+    void dump(StateContainer const& i_container)
+    {
+        const auto ids = i_container.getIds();
+        if (ids.empty())
+            g_log << "Empty" << std::endl << std::endl;
+        for (auto id : ids)
+            g_log << SquareMatrixUtils::toString(Utils::getMatrixRepository().at(id)) << std::endl;
+    }
+
 } // namespace anonymous
 
 auto Solver::solve(State const& i_state) -> MaybeResult
 {
+    g_log << "=== New entry ===" << std::endl;
+
     const auto flusher = Utils::ScopedCaller([]{
         Utils::getIdCounter() = 0;
         Utils::getMatrixRepository().clear();
@@ -35,32 +57,35 @@ auto Solver::solve(State const& i_state) -> MaybeResult
     StateContainer opened_states;
     StateContainer closed_states;
 
-    opened_states.add(i_state);
+    opened_states.push(i_state);
 
 	while (!opened_states.empty())
     {
 		const auto e = opened_states.getBestState();
 
+		g_log << "Best" << std::endl;
+        dump(e);
+
+        g_log << "Opened" << std::endl;
+        dump(opened_states);
+
+        g_log << "Closed" << std::endl;
+        dump(closed_states);
+
 		if (e.isSolution())
 			return {collectMoves(e)};
 
-        opened_states.remove(e);
-		closed_states.add(e);
+        opened_states.pop();
+		closed_states.push(e);
 
 		const auto ns = e.getAllNeighbours();
 
 		for (auto const& n : ns)
         {
-            if (opened_states.contains(n))
-                opened_states.remove(n);
-
-		    if (closed_states.contains(n))
-                continue;
-
             if (!opened_states.contains(n))
             {
                 n.setPredecessor(e);
-                opened_states.add(n);
+                opened_states.push(n);
             }
         }
 	}

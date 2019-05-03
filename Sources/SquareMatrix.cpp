@@ -41,3 +41,17 @@ bool SquareMatrixUtils::sorted(SquareMatrix const& i_matrix)
 				return false;
 	return true;
 }
+
+std::string SquareMatrixUtils::toString(SquareMatrix const& i_matrix)
+{
+    std::string result;
+
+    for (auto const& row : i_matrix.m_data)
+    {
+        for (auto const& n : row)
+            result += std::to_string(n) + ' ';
+        result += '\n';
+    }
+
+    return result;
+}
