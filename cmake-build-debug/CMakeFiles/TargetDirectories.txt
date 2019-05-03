@@ -1,4 +1,0 @@
-/Users/nestoroprysk/Documents/GitHub/NPuzzle/cmake-build-debug/CMakeFiles/Tests.dir
-/Users/nestoroprysk/Documents/GitHub/NPuzzle/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/Users/nestoroprysk/Documents/GitHub/NPuzzle/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/nestoroprysk/Documents/GitHub/NPuzzle/cmake-build-debug/CMakeFiles/NPuzzle.dir
