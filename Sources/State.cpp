@@ -3,22 +3,22 @@
 
 namespace {
 
-    std::size_t sortedness(State const& i_state)
+std::size_t sortedness(State const& i_state)
+{
+    std::size_t result = 0;
+    std::size_t c = 1;
+    const auto& matrix = Utils::getMatrixRepository().at(i_state.getId());
+    for (auto const& row : matrix.m_data)
     {
-        std::size_t result = 0;
-        std::size_t c = 1;
-        const auto& matrix = Utils::getMatrixRepository().at(i_state.getId());
-        for (auto const& row : matrix.m_data)
+        for (auto n : row)
         {
-            for (auto n : row)
-            {
-                const auto diff = n - c;
-                result += (diff < 0 ? -diff : diff);
-                ++c;
-            }
+            const auto diff = n - c;
+            result += (diff < 0 ? -diff : diff);
+            ++c;
         }
-        return result;
     }
+    return result;
+}
 
 } // namespace anonymous
 

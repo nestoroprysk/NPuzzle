@@ -8,46 +8,47 @@
 
 namespace {
 
-    std::list<Move> collectMovesImpl(State const& i_state,
-                                     State::MaybePredecessor const& i_opt_predecessor,
-                                     std::list<Move> o_result = std::list<Move>())
+std::list<Move> collectMovesImpl(State const& i_state,
+                                 State::MaybePredecessor const& i_opt_predecessor,
+                                 std::list<Move> o_result = std::list<Move>())
+{
+    if (i_opt_predecessor)
     {
-        if (i_opt_predecessor)
-        {
-            o_result.push_front(MoveUtils::inferMove(i_opt_predecessor->getMatrix(), i_state.getMatrix()));
-            return collectMovesImpl(*i_opt_predecessor, i_opt_predecessor->getPredecessor(), std::move(o_result));
-        }
-        return o_result;
+        o_result.push_front(MoveUtils::inferMove(i_opt_predecessor->getMatrix(), i_state.getMatrix()));
+        return collectMovesImpl(*i_opt_predecessor, i_opt_predecessor->getPredecessor(), std::move(o_result));
     }
+    return o_result;
+}
 
-    std::list<Move> collectMoves(State const& i_state)
-    {
-        return collectMovesImpl(i_state, i_state.getPredecessor());
-    }
+std::list<Move> collectMoves(State const& i_state)
+{
+    return collectMovesImpl(i_state, i_state.getPredecessor());
+}
 
-    static std::ofstream g_log("log.txt");
+static std::ofstream g_log("log.txt");
 
-    void dump(State const& i_state)
-    {
-        static std::size_t i = 0;
-        g_log << ++i << std::endl;
-        g_log << SquareMatrixUtils::toString(i_state.getMatrix()) << std::endl;
-    }
+void dump(State const& i_state)
+{
+    static std::size_t i = 0;
+    g_log << ++i << std::endl;
+    g_log << SquareMatrixUtils::toString(i_state.getMatrix()) << std::endl;
+}
 
-    void dump(StateContainer const& i_container)
-    {
-        const auto ids = i_container.getIds();
-        if (ids.empty())
-            g_log << "Empty" << std::endl << std::endl;
-        for (auto id : ids)
-            g_log << SquareMatrixUtils::toString(Utils::getMatrixRepository().at(id)) << std::endl;
-    }
+void dump(StateContainer const& i_container)
+{
+    const auto ids = i_container.getIds();
+    if (ids.empty())
+        g_log << "Empty" << std::endl << std::endl;
+    for (auto id : ids)
+        g_log << SquareMatrixUtils::toString(Utils::getMatrixRepository().at(id)) << std::endl;
+}
 
 } // namespace anonymous
 
 auto Solver::solve(State const& i_state) -> MaybeResult
 {
-    g_log << "=== New entry ===" << std::endl;
+    g_log << "=== Initial ===" << std::endl;
+    dump(i_state);
 
     const auto flusher = Utils::ScopedCaller([]{
         Utils::getIdCounter() = 0;
@@ -62,6 +63,8 @@ auto Solver::solve(State const& i_state) -> MaybeResult
 	while (!opened_states.empty())
     {
 		const auto e = opened_states.getBestState();
+
+        g_log << "=New iteration=" << std::endl << std::endl;
 
 		g_log << "Best" << std::endl;
         dump(e);
