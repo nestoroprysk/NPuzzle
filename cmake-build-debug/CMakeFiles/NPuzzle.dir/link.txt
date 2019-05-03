@@ -1,0 +1,2 @@
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar qc libNPuzzle.a  CMakeFiles/NPuzzle.dir/Sources/Move.cpp.o CMakeFiles/NPuzzle.dir/Sources/Parser.cpp.o CMakeFiles/NPuzzle.dir/Sources/ResultChecker.cpp.o CMakeFiles/NPuzzle.dir/Sources/Solver.cpp.o CMakeFiles/NPuzzle.dir/Sources/SquareMatrix.cpp.o CMakeFiles/NPuzzle.dir/Sources/State.cpp.o CMakeFiles/NPuzzle.dir/Sources/StateContainer.cpp.o
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib libNPuzzle.a

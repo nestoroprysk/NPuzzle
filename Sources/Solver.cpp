@@ -6,55 +6,67 @@
 
 namespace {
 
-static constexpr auto g_cost = 1;
+    std::list<Move> collectMovesImpl(State const& i_state,
+                                     State::MaybePredecessor const& i_opt_predecessor,
+                                     std::list<Move> o_result = std::list<Move>())
+    {
+        if (i_opt_predecessor)
+        {
+            o_result.push_front(MoveUtils::inferMove(i_opt_predecessor->getMatrix(), i_state.getMatrix()));
+            return collectMovesImpl(*i_opt_predecessor, i_opt_predecessor->getPredecessor(), std::move(o_result));
+        }
+        return o_result;
+    }
+
+    std::list<Move> collectMoves(State const& i_state)
+    {
+        return collectMovesImpl(i_state, i_state.getPredecessor());
+    }
 
 } // namespace anonymous
 
-StateContainer Solver::m_opened_states;
-StateContainer Solver::m_closed_states;
-
 auto Solver::solve(State const& i_state) -> MaybeResult
 {
-	auto const c = Utils::ScopedCaller(clear);
-	m_opened_states.add(i_state);
-	while (!m_opened_states.empty())
-	{
-		const auto e = m_opened_states.getBestState();
+    const auto flusher = Utils::ScopedCaller([]{
+        Utils::getIdCounter() = 0;
+        Utils::getMatrixRepository().clear();
+    });
+
+    StateContainer opened_states;
+    StateContainer closed_states;
+
+    opened_states.add(i_state);
+
+	while (!opened_states.empty())
+    {
+		const auto e = opened_states.getBestState();
+
 		if (e.isSolution())
-			return {e.collectMoves()};
-		m_closed_states.add(e);
+			return {collectMoves(e)};
+
+        opened_states.remove(e);
+		closed_states.add(e);
+
+		const auto nnn = e.getMatrix();
+
 		const auto ns = e.getAllNeighbours();
-		m_opened_states.remove(e);
+        const auto os = opened_states.size();
+        const auto cs = closed_states.size();
+
 		for (auto const& n : ns)
-			visit(n, e);
+        {
+            if (opened_states.contains(n))
+                opened_states.remove(n);
+
+		    if (closed_states.contains(n))
+                continue;
+
+            if (!opened_states.contains(n))
+            {
+                n.setPredecessor(e);
+                opened_states.add(n);
+            }
+        }
 	}
 	return {};
-}
-
-void Solver::visit(State const& i_state, State const& i_parent)
-{
-	if (!m_opened_states.contains(i_state) && !m_closed_states.contains(i_state))
-	{
-		i_state.setPredecessor(i_parent);
-		m_opened_states.add(i_state);
-	}
-	else
-	{
-		if (i_state.cost() > i_parent.cost() + g_cost)
-		{
-			i_state.cost() = i_parent.cost() + g_cost;
-			i_state.setPredecessor(i_parent);
-		}
-		if (m_closed_states.contains(i_state))
-		{
-			m_opened_states.add(i_parent);
-			m_closed_states.remove(i_parent);
-		}
-	}
-}
-
-void Solver::clear()
-{
-	m_opened_states.clear();
-	m_closed_states.clear();
 }

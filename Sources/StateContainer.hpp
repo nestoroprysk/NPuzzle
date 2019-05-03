@@ -1,18 +1,22 @@
 #pragma once
 
-#include <list>
+#include "State.hpp"
 
-struct State;
+#include <optional>
+#include <vector>
 
 class StateContainer
 {
 public:
-	void add(State const& i_state);
+    using MaybeState = std::optional<State>;
+	void add(State);
 	void remove(State const&);
 	bool empty() const;
 	bool contains(State const&) const;
+	auto find(State const& i_rhs) const -> MaybeState;
 	void clear();
 	State getBestState() const;
+	std::size_t size() const;
 private:
-	std::list<State> m_states;
+	std::vector<State> m_states;
 };

@@ -52,6 +52,8 @@ SquareMatrix MoveUtils::move(SquareMatrix const& i_matrix, Move i_move)
 
 Move MoveUtils::inferMove(SquareMatrix const& i_from, SquareMatrix const& i_to)
 {
+    if (i_from == i_to)
+        throw std::logic_error("Uniqual matrices expected");
 	for (auto const m : MoveUtils::possibleMoves(i_from))
 		if (MoveUtils::move(i_from, m) == i_to)
 			return m;

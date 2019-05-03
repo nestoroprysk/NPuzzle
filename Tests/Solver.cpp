@@ -19,9 +19,10 @@ TEST_CASE("Solver")
 		)";
 		const auto opt_solution = Solver::solve(Parser::parse(str));
 		REQUIRE(opt_solution);
+		REQUIRE(opt_solution->empty());
 		REQUIRE(ResultChecker::checkResult(Parser::parse(str), *opt_solution).m_valid);
 	}
-	SECTION("Nearly solved")
+	SECTION("Nearly solved 2")
 	{
 		const auto str =
 		R"(
@@ -31,35 +32,42 @@ TEST_CASE("Solver")
 			4 5 6
 			7 0 8
 		)";
-		const auto opt_solution = Solver::solve(Parser::parse(str));
-		REQUIRE(opt_solution);
+		Solver::MaybeResult opt_solution;
+		REQUIRE_NOTHROW(opt_solution = Solver::solve(Parser::parse(str)));
+        REQUIRE(opt_solution);
+        REQUIRE(opt_solution->size() == 1);
 		REQUIRE(ResultChecker::checkResult(Parser::parse(str), *opt_solution).m_valid);
 	}
-	SECTION("Solvable")
-	{
-		const auto str =
-		R"(
+    SECTION("Nearly solved 3")
+    {
+        const auto str =
+                R"(
 			# This puzzle is solvable
 			3
-			2 8 3
-			6 0 1
-			5 7 4
+			1 2 3
+			4 5 6
+			0 7 8
 		)";
-		const auto opt_solution = Solver::solve(Parser::parse(str));
-		REQUIRE(opt_solution);
-		REQUIRE(ResultChecker::checkResult(Parser::parse(str), *opt_solution).m_valid);
-	}
-	SECTION("Unsolvable")
-	{
-		const auto str =
-		R"(
-			# This puzzle is unsolvable
-			3
-			6 2 4
-			8 1 5
-			7 3 0
+        Solver::MaybeResult opt_solution;
+        REQUIRE_NOTHROW(opt_solution = Solver::solve(Parser::parse(str)));
+        REQUIRE(opt_solution);
+        REQUIRE(opt_solution->size() == 2);
+        REQUIRE(ResultChecker::checkResult(Parser::parse(str), *opt_solution).m_valid);
+    }
+    SECTION("Solvable")
+    {
+        const auto str =
+                R"(
+			# This puzzle is solvable
+            3
+            2 3 5
+            4 0 1
+            6 7 8
 		)";
-		const auto opt_solution = Solver::solve(Parser::parse(str));
-		REQUIRE(!opt_solution);
-	}
+        Solver::MaybeResult opt_solution;
+        REQUIRE_NOTHROW(opt_solution = Solver::solve(Parser::parse(str)));
+        REQUIRE(opt_solution);
+        REQUIRE(!opt_solution->empty());
+        REQUIRE(ResultChecker::checkResult(Parser::parse(str), *opt_solution).m_valid);
+    }
 }

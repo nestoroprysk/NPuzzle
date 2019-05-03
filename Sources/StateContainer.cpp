@@ -3,19 +3,27 @@
 #include "State.hpp"
 #include <string>
 
-// TODO: optimize so as to add not a copy
-void StateContainer::add(State const& i_state)
+void StateContainer::add(State i_state)
 {
 	if (contains(i_state))
 		throw std::logic_error("Trying to insert an existing node");
-	m_states.push_back(i_state);
+	m_states.push_back(std::move(i_state));
+	auto comp = [](auto const& i_lhs, auto const& i_rhs){return i_lhs < i_rhs;};
+	//std::sort(m_states.begin(), m_states.end(), comp);
 }
 
 void StateContainer::remove(State const& i_state)
 {
 	if (!contains(i_state))
 		throw std::logic_error("Trying to delete a non-existing node");
-	m_states.remove(i_state);
+    for (auto i = 0; i < m_states.size(); ++i)
+    {
+        if (m_states[i] == i_state)
+        {
+            m_states.erase(m_states.begin() + i);
+            break;
+        }
+    }
 }
 
 bool StateContainer::empty() const
@@ -25,8 +33,15 @@ bool StateContainer::empty() const
 
 bool StateContainer::contains(State const& i_rhs) const
 {
-	return std::any_of(m_states.cbegin(), m_states.cend(),
-			[&](auto const& i_state){ return i_state == i_rhs; });
+    return find(i_rhs) != std::nullopt;
+}
+
+auto StateContainer::find(State const& i_rhs) const -> MaybeState
+{
+    for (auto const& state : m_states)
+        if (state == i_rhs)
+            return state;
+    return {};
 }
 
 void StateContainer::clear()
@@ -34,10 +49,14 @@ void StateContainer::clear()
 	m_states.clear();
 }
 
-// TODO: optimize so as to return not a copy
 State StateContainer::getBestState() const
 {
 	if (empty())
 		throw std::logic_error("No best state in an empty container");
 	return *m_states.cbegin();
+}
+
+std::size_t StateContainer::size() const
+{
+    return m_states.size();
 }
