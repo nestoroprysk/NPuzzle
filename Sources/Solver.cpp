@@ -47,11 +47,7 @@ auto Solver::solve(State const& i_state) -> MaybeResult
         opened_states.remove(e);
 		closed_states.add(e);
 
-		const auto nnn = e.getMatrix();
-
 		const auto ns = e.getAllNeighbours();
-        const auto os = opened_states.size();
-        const auto cs = closed_states.size();
 
 		for (auto const& n : ns)
         {
