@@ -1,11 +1,6 @@
 #include "State.hpp"
 #include "Utils.hpp"
 
-namespace {
-
-
-} // namespace anonymous
-
 State::State(SquareMatrix const& i_matrix)
     : m_id(Utils::getIdCounter()++)
 {
@@ -57,19 +52,21 @@ State::Id State::getId() const
     return m_id;
 }
 
+namespace {
+
+    Point expectedPosition(std::size_t const i_n, std::size_t const i_nbDimensions)
+    {
+        return {i_n / i_nbDimensions, i_n % i_nbDimensions};
+    }
+
+}
+
 std::size_t StateUtils::sortedness(State const& i_state)
 {
     std::size_t result = 0;
-    std::size_t c = 1;
-    const auto& matrix = Utils::getMatrixRepository().at(i_state.getId());
-    for (auto const& row : matrix.m_data)
-    {
-        for (auto n : row)
-        {
-            const auto diff = n - c;
-            result += (diff < 0 ? -diff : diff);
-            ++c;
-        }
-    }
+    const auto& matrix = Utils::getMatrixRepository().at(i_state.getId()).m_data;
+    for (std::size_t i = 0; i < matrix.size(); ++i)
+        for (std::size_t j = 0; j < matrix.size(); ++j)
+            result += PointUtils::distance({i, j}, expectedPosition(matrix[i][j], matrix.size()));
     return result;
 }
