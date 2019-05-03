@@ -1,6 +1,6 @@
 #pragma once
 
-#include <algorithm>
+#include <cstddef>
 
 struct Point
 {
@@ -14,7 +14,7 @@ namespace Detail {
 
 inline std::size_t diff(std::size_t i_a, std::size_t i_b)
 {
-    return std::min(i_a - i_b, i_b - i_a);
+    return i_a > i_b ? i_a - i_b : i_b - i_a;
 }
 
 } // namespace Detail
