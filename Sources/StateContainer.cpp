@@ -8,8 +8,6 @@ void StateContainer::add(State i_state)
 	if (contains(i_state))
 		throw std::logic_error("Trying to insert an existing node");
 	m_states.push_back(std::move(i_state));
-	auto comp = [](auto const& i_lhs, auto const& i_rhs){return i_lhs < i_rhs;};
-	//std::sort(m_states.begin(), m_states.end(), comp);
 }
 
 void StateContainer::remove(State const& i_state)
