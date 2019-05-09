@@ -5,6 +5,7 @@
 #include "Move.hpp"
 
 #include <fstream>
+#include <iostream>
 
 namespace {
 

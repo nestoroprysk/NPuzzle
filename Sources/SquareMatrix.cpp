@@ -44,12 +44,12 @@ bool SquareMatrixUtils::sorted(SquareMatrix const& i_matrix)
 
 std::string SquareMatrixUtils::toString(SquareMatrix const& i_matrix)
 {
+	const auto empty = biggest(i_matrix);
     std::string result;
-
     for (auto const& row : i_matrix.m_data)
     {
         for (auto const& n : row)
-            result += std::to_string(n) + ' ';
+            result += (n == empty ? "#" : std::to_string(n)) + ' ';
         result += '\n';
     }
 

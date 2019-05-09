@@ -45,6 +45,17 @@ target_link_libraries(Tests NPuzzle)
 
 target_include_directories(Tests PUBLIC ${NPuzzleDir})
 
+# sortedness executable
+
+set(SortednessDir ${CMAKE_CURRENT_SOURCE_DIR}/Sortedness)
+file(GLOB SortednessSources  ${SortednessDir}/main.cpp)
+
+add_executable(Sortedness ${SortednessSources})
+
+target_link_libraries(Sortedness NPuzzle)
+
+target_include_directories(Sortedness PUBLIC ${NPuzzleDir})
+
 # definitions
 
 add_definitions(-DPATH_TO_TESTS_DIR="${TestsDir}")
