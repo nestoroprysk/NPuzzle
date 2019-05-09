@@ -12,6 +12,7 @@ public:
     using MaybePredecessor = std::shared_ptr<State>;
     State(SquareMatrix const& i_matrix);
     State(State const& i_other);
+    // TODO: define move C and A
     auto getAllNeighbours() const -> std::vector<State>;
     State getNeighbour(Move i_move) const;
     bool isSolution() const;

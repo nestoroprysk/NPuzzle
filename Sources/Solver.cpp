@@ -85,7 +85,7 @@ auto Solver::solve(State const& i_state) -> MaybeResult
 
 		for (auto const& n : ns)
         {
-            if (!opened_states.contains(n))
+            if (!closed_states.contains(n) && !opened_states.contains(n))
             {
                 n.setPredecessor(e);
                 opened_states.push(n);

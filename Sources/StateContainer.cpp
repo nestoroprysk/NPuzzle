@@ -1,6 +1,7 @@
 #include "StateContainer.hpp"
 
 #include "State.hpp"
+#include "Utils.hpp"
 #include <string>
 
 void StateContainer::push(State i_state)
@@ -26,7 +27,12 @@ bool StateContainer::empty() const
 
 bool StateContainer::contains(State const& i_rhs) const
 {
-    return m_ids.find(i_rhs.getId()) != m_ids.cend();
+	// TODO: optimize with hash
+	const auto& i_rhs_matrix = Utils::getMatrixRepository().at(i_rhs.getId());
+    return std::any_of(m_ids.cbegin(), m_ids.cend(),
+    	[&i_rhs_matrix](auto const i_id){
+    		return Utils::getMatrixRepository().at(i_id) == i_rhs_matrix;
+	});
 }
 
 State StateContainer::getBestState() const

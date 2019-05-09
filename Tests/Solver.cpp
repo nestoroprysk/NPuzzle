@@ -61,8 +61,25 @@ TEST_CASE("Solver")
 					# This puzzle is solvable
 					3
 					1 2 3
-					4 0 6
-					7 8 5
+					4 0 5
+					7 8 6
+		)";
+        Solver::MaybeResult opt_solution;
+        REQUIRE_NOTHROW(opt_solution = Solver::solve(Parser::parse(str)));
+        REQUIRE(opt_solution);
+        REQUIRE(!opt_solution->empty());
+        REQUIRE(ResultChecker::checkResult(Parser::parse(str), *opt_solution).m_valid);
+    }
+    SECTION("Solvable")
+    {
+        const auto str =
+                R"(
+					# This puzzle is solvable
+					3
+					0 2 3
+					1 4 5
+					7 8 6
+					
 		)";
         Solver::MaybeResult opt_solution;
         REQUIRE_NOTHROW(opt_solution = Solver::solve(Parser::parse(str)));
