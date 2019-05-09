@@ -56,7 +56,10 @@ namespace {
 
     Point expectedPosition(std::size_t const i_n, std::size_t const i_nbDimensions)
     {
-        return {i_n / i_nbDimensions, i_n % i_nbDimensions};
+        if (i_n == 0)
+            throw std::logic_error("0 not expected");
+        const auto adjusted_n = i_n - 1;
+        return {adjusted_n / i_nbDimensions, adjusted_n % i_nbDimensions};
     }
 
 }

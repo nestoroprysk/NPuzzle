@@ -2,7 +2,6 @@
 
 #include "State.hpp"
 
-#include <queue>
 #include <set>
 #include <vector>
 
@@ -24,9 +23,9 @@ public:
 	bool contains(State const&) const;
 	State getBestState() const;
 	std::size_t size() const;
-    std::set<State::Id> const& getIds() const;
+    std::set<State::Id> getIds() const;
 private:
-    using ContainerType = std::priority_queue<State, std::vector<State>, decltype(Detail::cmp)>;
+	// TODO: research priority queue
+    using ContainerType = std::multiset<State, decltype(Detail::cmp)>;
     ContainerType m_states = ContainerType(Detail::cmp);
-	std::set<State::Id> m_ids;
 };

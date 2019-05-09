@@ -6,18 +6,14 @@
 
 void StateContainer::push(State i_state)
 {
-	if (m_ids.find(i_state.getId()) != m_ids.cend())
-		throw std::logic_error("Trying to insert an existing node");
-	m_ids.insert(i_state.getId());
-	m_states.push(std::move(i_state));
+	m_states.insert(std::move(i_state));
 }
 
 void StateContainer::pop()
 {
 	if (m_states.empty())
 		throw std::logic_error("Trying to delete a non-existing node");
-	m_ids.erase(m_states.top().getId());
-    m_states.pop();
+	m_states.erase(m_states.begin());
 }
 
 bool StateContainer::empty() const
@@ -27,11 +23,14 @@ bool StateContainer::empty() const
 
 bool StateContainer::contains(State const& i_rhs) const
 {
-	// TODO: optimize with hash
-	const auto& i_rhs_matrix = Utils::getMatrixRepository().at(i_rhs.getId());
-    return std::any_of(m_ids.cbegin(), m_ids.cend(),
-    	[&i_rhs_matrix](auto const i_id){
-    		return Utils::getMatrixRepository().at(i_id) == i_rhs_matrix;
+	const auto matrix = [](auto const i_id) -> SquareMatrix const&{
+		return Utils::getMatrixRepository().at(i_id);
+	};
+	const auto& rhs_matrix = matrix(i_rhs.getId());
+	const auto range = m_states.equal_range(i_rhs);
+	return std::any_of(range.first, range.second,
+		[&matrix, &rhs_matrix](auto const& i_e){
+			return matrix(i_e.getId()) == rhs_matrix;
 	});
 }
 
@@ -39,7 +38,7 @@ State StateContainer::getBestState() const
 {
 	if (empty())
 		throw std::logic_error("No best state in an empty container");
-	return m_states.top();
+	return *m_states.cbegin();
 }
 
 std::size_t StateContainer::size() const
@@ -47,7 +46,10 @@ std::size_t StateContainer::size() const
     return m_states.size();
 }
 
-std::set<State::Id> const& StateContainer::getIds() const
+std::set<State::Id> StateContainer::getIds() const
 {
-    return m_ids;
+	std::set<State::Id> result;
+	for (auto const& s : m_states)
+		result.insert(s.getId());
+    return result;
 }

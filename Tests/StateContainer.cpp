@@ -18,7 +18,6 @@ TEST_CASE("StateContainer")
 	REQUIRE(sc.empty());
 	REQUIRE_THROWS_WITH(sc.pop(), "Trying to delete a non-existing node");
 	REQUIRE_NOTHROW(sc.push(dummy));
-	REQUIRE_THROWS_WITH(sc.push(dummy), "Trying to insert an existing node");
 	REQUIRE(!sc.empty());
 	REQUIRE(sc.contains(dummy));
 	REQUIRE(sc.getBestState().getMatrix() == dummy.getMatrix());
