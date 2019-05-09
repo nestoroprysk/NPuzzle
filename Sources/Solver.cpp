@@ -76,7 +76,7 @@ auto Solver::solve(State const& i_state) -> MaybeResult
         dump(closed_states);
 
 		if (e.isSolution())
-			return {collectMoves(e)};
+			return std::make_shared<std::list<Move>>(collectMoves(e));
 
         opened_states.pop();
 		closed_states.push(e);

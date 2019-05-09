@@ -3,7 +3,6 @@
 #include "Move.hpp"
 #include "SquareMatrix.hpp"
 #include <vector>
-#include <optional>
 #include <list>
 
 class State

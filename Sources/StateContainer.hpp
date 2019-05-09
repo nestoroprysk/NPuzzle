@@ -2,7 +2,6 @@
 
 #include "State.hpp"
 
-#include <optional>
 #include <queue>
 #include <set>
 #include <vector>
@@ -18,7 +17,7 @@ auto const cmp = [](auto const &i_lhs, auto const &i_rhs) {
 class StateContainer
 {
 public:
-    using MaybeState = std::optional<State>;
+    using MaybeState = std::shared_ptr<State>;
 	void push(State);
 	void pop();
 	bool empty() const;
