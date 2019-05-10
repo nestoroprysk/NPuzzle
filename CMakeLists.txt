@@ -59,3 +59,7 @@ target_include_directories(Sortedness PUBLIC ${NPuzzleDir})
 # definitions
 
 add_definitions(-DPATH_TO_TESTS_DIR="${TestsDir}")
+
+set(BuildDir ${CMAKE_CURRENT_SOURCE_DIR}/Build)
+
+add_definitions(-DPATH_TO_BUILD_DIR="${BuildDir}")

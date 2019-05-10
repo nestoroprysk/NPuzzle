@@ -11,7 +11,7 @@ auto const cmp = [](auto const &i_lhs, auto const &i_rhs) {
     return StateUtils::sortedness(i_lhs) < StateUtils::sortedness(i_rhs);
 };
 
-}
+} // namespace Detail
 
 class StateContainer
 {

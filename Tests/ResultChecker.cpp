@@ -25,63 +25,63 @@ TEST_CASE("ResultChecker")
         R"(
             # This puzzle is solvable
             3
-            1 2 3
-            4 5 6
-            7 8 0
+            0 1 2
+            3 4 5
+            6 7 8
         )";
         const auto matrix = Parser::parse(str);
         REQUIRE(ResultChecker::checkResult(matrix, {}).m_valid);
     }
-    SECTION("Basic valid with single move right")
+    SECTION("Basic valid with single move left")
     {
         const auto str =
         R"(
             # This puzzle is solvable
             3
-            1 2 3
-            4 5 6
-            7 0 8
+            1 0 2
+            3 4 5
+            6 7 8
         )";
         const auto matrix = Parser::parse(str);
-        REQUIRE(ResultChecker::checkResult(matrix, {Move::Right}).m_valid);
+        REQUIRE(ResultChecker::checkResult(matrix, {Move::Left}).m_valid);
     }
-    SECTION("Basic valid with single move down")
+    SECTION("Basic valid with single move up")
     {
         const auto str =
         R"(
             # This puzzle is solvable
             3
-            1 2 3
-            4 5 0
-            7 8 6
+            3 1 2
+            0 4 5
+            6 7 8
         )";
         const auto matrix = Parser::parse(str);
-        REQUIRE(ResultChecker::checkResult(matrix, {Move::Down}).m_valid);
+        REQUIRE(ResultChecker::checkResult(matrix, {Move::Up}).m_valid);
     }
-    SECTION("Move up and down identity")
+    SECTION("Move down and up identity")
     {
         const auto str =
         R"(
             # This puzzle is solvable
             3
-            1 2 3
-            4 5 6
-            7 8 0
+            0 1 2
+            3 4 5
+            6 7 8
         )";
         const auto matrix = Parser::parse(str);
-        REQUIRE(ResultChecker::checkResult(matrix, {Move::Up, Move::Down}).m_valid);
+        REQUIRE(ResultChecker::checkResult(matrix, {Move::Down, Move::Up}).m_valid);
     }
-    SECTION("Move left and right identity")
+    SECTION("Move right and left identity")
     {
         const auto str =
         R"(
             # This puzzle is solvable
             3
-            1 2 3
-            4 5 6
-            7 8 0
+            0 1 2
+            3 4 5
+            6 7 8
         )";
         const auto matrix = Parser::parse(str);
-        REQUIRE(ResultChecker::checkResult(matrix, {Move::Left, Move::Right}).m_valid);
+        REQUIRE(ResultChecker::checkResult(matrix, {Move::Right, Move::Left}).m_valid);
     }
 }

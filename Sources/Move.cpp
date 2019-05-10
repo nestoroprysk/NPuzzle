@@ -1,5 +1,4 @@
 #include "Move.hpp"
-
 #include "SquareMatrix.hpp"
 
 namespace {
@@ -16,7 +15,7 @@ auto swap(SquareMatrix const& i_matrix, Point const a, Point const b) -> SquareM
 auto MoveUtils::possibleMoves(SquareMatrix const& i_matrix) -> std::unordered_set<Move>
 {
     std::unordered_set<Move> result;
-    const auto p = SquareMatrixUtils::biggestCoordinates(i_matrix);
+    const auto p = SquareMatrixUtils::movingPointCoordinates(i_matrix);
     if (p.i != 0) result.insert(Move::Up);
     if (p.i != i_matrix.m_n - 1) result.insert(Move::Down);
     if (p.j != 0) result.insert(Move::Left);
@@ -34,7 +33,7 @@ SquareMatrix MoveUtils::move(SquareMatrix const& i_matrix, Move i_move)
 {
     if (!MoveUtils::isValid(i_matrix, i_move))
         throw std::logic_error("Invalid move");
-    const auto p = SquareMatrixUtils::biggestCoordinates(i_matrix);
+    const auto p = SquareMatrixUtils::movingPointCoordinates(i_matrix);
     switch (i_move)
     {
         case Move::Left:

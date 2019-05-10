@@ -3,7 +3,6 @@
 #include "Move.hpp"
 #include <list>
 
-
 class State;
 
 namespace ResultChecker {

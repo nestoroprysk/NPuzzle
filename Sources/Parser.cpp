@@ -1,11 +1,14 @@
 #include "Parser.hpp"
+#include "Utils.hpp"
 #include <sstream>
 #include <unordered_set>
 
 namespace {
 
-static constexpr auto g_moving_point = 0;
+static constexpr auto g_n_position = 0;
 static constexpr auto g_comment = '#';
+static constexpr auto g_map_size_lower_limit = 3;
+static constexpr auto g_map_size_upper_limit = 64;
 
 bool isEmpty(std::string const& i_str)
 {
@@ -23,14 +26,6 @@ bool isComment(std::string const& i_str)
     return false;
 }
 
-std::size_t getN(std::stringstream& i_ss)
-{
-    std::size_t result = 0;
-    if (std::string s; std::getline(i_ss, s))
-        return std::stoi(s);
-    throw std::logic_error("N expected");
-}
-
 auto split(std::string const& i_str) -> std::vector<std::size_t>
 {
     std::stringstream ss(i_str);
@@ -41,37 +36,32 @@ auto split(std::string const& i_str) -> std::vector<std::size_t>
     return result;
 }
 
-void skipComment(std::stringstream& i_ss)
+auto tryGetPureLines(const std::string& i_content) -> std::vector<std::string>
 {
-    for (std::string s; std::getline(i_ss, s);)
-    {
-        if (isEmpty(s))
-            continue;
-        if (!isComment(s))
-            throw std::logic_error("Comment expected");
-        break;
-    }
+    std::vector<std::string> result;
+    auto ss = std::stringstream(i_content);
+    for (std::string s; std::getline(ss, s);)
+        if (!isComment(s) && !isEmpty(s))
+            result.push_back(std::move(s));
+    if (result.empty())
+        throw std::invalid_argument("Content cannot be empty");
+    return result;
 }
 
-
-auto preprocess(SquareMatrix::SquareArray&& i_array) -> SquareMatrix::SquareArray
+std::size_t tryGetN(std::string const& i_str)
 {
-    for (auto& row : i_array)
-    {
-        for (auto& n : row)
-        {
-            if (n == g_moving_point)
-            {
-                n = i_array.size() * i_array.size();
-                return i_array;
-            }
-        }
-    }
-    throw std::logic_error("Validation failed: no zero found");
+    const auto result = std::atoi(i_str.c_str());
+    if (result < g_map_size_lower_limit || result > g_map_size_upper_limit)
+        throw std::invalid_argument("Number indicating the number of should be within the range [3, 64] "
+            "(got " + std::to_string(result) + ")");
+    return result;
 }
 
-auto validate(SquareMatrix::SquareArray&& i_array) -> SquareMatrix::SquareArray
+auto validate(SquareMatrix::SquareArray&& i_array, std::size_t const i_n) -> SquareMatrix::SquareArray
 {
+    if (i_array.size() != i_n)
+        throw std::logic_error(std::string("N and parsed matrix side len mismatch: [") +
+            std::to_string(i_n) + "," + std::to_string(i_array.size()) + "]");
     const auto height = i_array.size();
     if (height == 0)
         throw std::logic_error("Invalid empty SquareMatrix");
@@ -98,21 +88,10 @@ auto validate(SquareMatrix::SquareArray&& i_array) -> SquareMatrix::SquareArray
 
 SquareMatrix Parser::parse(std::string const& i_content)
 {
-    std::stringstream ss(i_content);
-
-    skipComment(ss);
-
-    auto const n = getN(ss);
-
+    const auto lines = tryGetPureLines(i_content);
     SquareMatrix::SquareArray result;
-    
-    for (std::string s; std::getline(ss, s);)
-        if (!isEmpty(s))
-            result.push_back(split(s));
-
-    if (result.size() != n)
-        throw std::logic_error(std::string("N and parsed matrix side len mismatch: [") +
-            std::to_string(n) + "," + std::to_string(result.size()) + "]");
-
-    return preprocess(validate(std::move(result)));
+    for(auto it = std::begin(lines) + 1; it != lines.cend(); ++it)
+        result.push_back(split(*it));
+    const auto n = tryGetN(lines[g_n_position]);
+    return validate(std::move(result), n);
 }

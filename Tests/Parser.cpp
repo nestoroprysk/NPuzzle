@@ -16,7 +16,7 @@ TEST_CASE("Parser basics")
     const auto e = SquareMatrix(
         {
             {8, 4, 6},
-            {2, 9, 5},
+            {2, 0, 5},
             {3, 7, 1}
         }
     );
@@ -41,7 +41,7 @@ TEST_CASE("Parser basics bigger")
             {24, 13, 21,  4, 19},
             {17,  5, 16, 11,  9},
             {18, 12, 23,  3,  7},
-            {10,  6,  25, 2, 15}
+            {10,  6,  0, 2, 15}
         }
     );
     REQUIRE(Parser::parse(str) == e);
@@ -63,30 +63,32 @@ TEST_CASE("Parser error handling")
     }
     SECTION("Empty")
     {
-        REQUIRE_THROWS_WITH(Parser::parse({}), "N expected");
+        REQUIRE_THROWS_WITH(Parser::parse({}), "Content cannot be empty");
     }
-    SECTION("Non-square")
+    SECTION("N error")
     {
         const auto str =
         R"(
-            3
+            31213
             8 4 6
             2 0 5
             3 7 1
         )";
-        REQUIRE_THROWS_WITH(Parser::parse(str), "Comment expected");
+        REQUIRE_THROWS_WITH(Parser::parse(str), "Number indicating the number of should be within the range [3, 64]"
+            " (got 31213)");
     }
     SECTION("N and matrix mismatch")
     {
     const auto str =
         R"(
             # This puzzle is solvable
-            2
+            -1
             8 4 6
             2 0 5
             3 7 1
         )";
-        REQUIRE_THROWS_WITH(Parser::parse(str), "N and parsed matrix side len mismatch: [2,3]");
+        REQUIRE_THROWS_WITH(Parser::parse(str), "Number indicating the number of should be within the range [3, 64]"
+            " (got -1)");
     }
     SECTION("Unique numbers")
     {
@@ -117,9 +119,9 @@ TEST_CASE("Parser error handling")
         const auto str =
         R"(
             # This puzzle is solvable
-            0
+            5
         )";
-        REQUIRE_THROWS_WITH(Parser::parse(str), "Invalid empty SquareMatrix");
+        REQUIRE_THROWS_WITH(Parser::parse(str), "N and parsed matrix side len mismatch: [5,0]");
     }
     SECTION("Too small")
     {
@@ -130,7 +132,7 @@ TEST_CASE("Parser error handling")
             0 1
             2 3
         )";
-        REQUIRE_THROWS_WITH(Parser::parse(str), "N must be at least 3");
+        REQUIRE_THROWS_WITH(Parser::parse(str), "Number indicating the number of should be within the range [3, 64] (got 2)");
     }
     SECTION("Variable len")
     {
