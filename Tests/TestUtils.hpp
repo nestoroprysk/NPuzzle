@@ -6,7 +6,7 @@ namespace TestUtils {
 
 inline std::string getTestsDirPath()
 {
-	return PATH_TO_TESTS_DIR;
+    return PATH_TO_TESTS_DIR;
 }
 
 } // namespace TestUtils

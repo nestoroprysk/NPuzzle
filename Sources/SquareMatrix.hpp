@@ -5,11 +5,11 @@
 
 struct SquareMatrix
 {
-	using SquareArray = std::vector<std::vector<std::size_t>>;
-	SquareMatrix(SquareArray&& i_array);
-	const SquareArray m_data;
-	const std::size_t m_n;
-	bool operator==(SquareMatrix const& i_rhs) const;
+    using SquareArray = std::vector<std::vector<std::size_t>>;
+    SquareMatrix(SquareArray&& i_array);
+    const SquareArray m_data;
+    const std::size_t m_n;
+    bool operator==(SquareMatrix const& i_rhs) const;
 };
 
 namespace SquareMatrixUtils {

@@ -9,7 +9,7 @@ class State;
 
 namespace Solver {
 
-	using MaybeResult = std::shared_ptr<std::list<Move>>;
-	MaybeResult solve(State const& i_state);
+    using MaybeResult = std::shared_ptr<std::list<Move>>;
+    MaybeResult solve(State const& i_state);
 
 } // namespace Solver

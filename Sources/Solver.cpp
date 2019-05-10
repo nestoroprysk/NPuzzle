@@ -61,13 +61,13 @@ auto Solver::solve(State const& i_state) -> MaybeResult
 
     opened_states.push(i_state);
 
-	while (!opened_states.empty())
+    while (!opened_states.empty())
     {
-		const auto e = opened_states.getBestState();
+        const auto e = opened_states.getBestState();
 
         g_log << "=New iteration=" << std::endl << std::endl;
 
-		g_log << "Best" << std::endl;
+        g_log << "Best" << std::endl;
         dump(e);
 
         g_log << "Opened" << std::endl;
@@ -76,15 +76,15 @@ auto Solver::solve(State const& i_state) -> MaybeResult
         g_log << "Closed" << std::endl;
         dump(closed_states);
 
-		if (e.isSolution())
-			return std::make_shared<std::list<Move>>(collectMoves(e));
+        if (e.isSolution())
+            return std::make_shared<std::list<Move>>(collectMoves(e));
 
         opened_states.pop();
-		closed_states.push(e);
+        closed_states.push(e);
 
-		const auto ns = e.getAllNeighbours();
+        const auto ns = e.getAllNeighbours();
 
-		for (auto const& n : ns)
+        for (auto const& n : ns)
         {
             if (!closed_states.contains(n) && !opened_states.contains(n))
             {
@@ -92,6 +92,6 @@ auto Solver::solve(State const& i_state) -> MaybeResult
                 opened_states.push(n);
             }
         }
-	}
-	return {};
+    }
+    return {};
 }

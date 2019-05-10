@@ -8,28 +8,28 @@ State::State(SquareMatrix const& i_matrix)
 }
 
 State::State(State const& i_other)
-	: m_opt_predecessor(i_other.m_opt_predecessor)
-	, m_id(i_other.m_id)
+    : m_opt_predecessor(i_other.m_opt_predecessor)
+    , m_id(i_other.m_id)
 {
 }
 
 auto State::getAllNeighbours() const -> std::vector<State>
 {
-	std::vector<State> result;
-	auto const ms = MoveUtils::possibleMoves(Utils::getMatrixRepository().at(m_id));
-	for (auto const m : ms)
-		result.push_back(getNeighbour(m));
-	return result;
+    std::vector<State> result;
+    auto const ms = MoveUtils::possibleMoves(Utils::getMatrixRepository().at(m_id));
+    for (auto const m : ms)
+        result.push_back(getNeighbour(m));
+    return result;
 }
 
 State State::getNeighbour(Move i_move) const
 {
-	return MoveUtils::move(Utils::getMatrixRepository().at(m_id), i_move);
+    return MoveUtils::move(Utils::getMatrixRepository().at(m_id), i_move);
 }
 
 bool State::isSolution() const
 {
-	return SquareMatrixUtils::sorted(Utils::getMatrixRepository().at(m_id));
+    return SquareMatrixUtils::sorted(Utils::getMatrixRepository().at(m_id));
 }
 
 void State::setPredecessor(State const& i_parent) const
@@ -39,12 +39,12 @@ void State::setPredecessor(State const& i_parent) const
 
 auto State::getPredecessor() const -> MaybePredecessor
 {
-	return m_opt_predecessor;
+    return m_opt_predecessor;
 }
 
 SquareMatrix const& State::getMatrix() const
 {
-	return Utils::getMatrixRepository().at(m_id);
+    return Utils::getMatrixRepository().at(m_id);
 }
 
 State::Id State::getId() const
