@@ -24,7 +24,8 @@ file(GLOB NPuzzleSources	${NPuzzleDir}/Utils.hpp
 							${NPuzzleDir}/State.cpp
 							${NPuzzleDir}/State.hpp
 							${NPuzzleDir}/StateContainer.cpp
-							${NPuzzleDir}/StateContainer.hpp)
+							${NPuzzleDir}/MatrixRepository.cpp
+							${NPuzzleDir}/MatrixRepository.hpp)
 add_library(NPuzzle STATIC ${NPuzzleSources})
 
 # testing executable

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "State.hpp"
+#include "MatrixRepository.hpp"
 
 #include <set>
 #include <vector>
@@ -8,7 +9,8 @@
 namespace Detail {
 
 auto const cmp = [](auto const &i_lhs, auto const &i_rhs) {
-    return StateUtils::sortedness(i_lhs) < StateUtils::sortedness(i_rhs);
+    return MatrixRepository::getSortedness(i_lhs.getId()) <
+        MatrixRepository::getSortedness(i_rhs.getId());
 };
 
 } // namespace Detail

@@ -1,10 +1,11 @@
 #include "State.hpp"
 #include "Utils.hpp"
+#include "MatrixRepository.hpp"
 
 State::State(SquareMatrix const& i_matrix)
     : m_id(Utils::getIdCounter()++)
 {
-    Utils::getMatrixRepository().emplace(m_id, i_matrix);
+    MatrixRepository::add(m_id, i_matrix);
 }
 
 State::State(State const& i_other)
@@ -16,7 +17,7 @@ State::State(State const& i_other)
 auto State::getAllNeighbours() const -> std::vector<State>
 {
     std::vector<State> result;
-    auto const ms = MoveUtils::possibleMoves(Utils::getMatrixRepository().at(m_id));
+    auto const ms = MoveUtils::possibleMoves(MatrixRepository::getMatrix(m_id));
     for (auto const m : ms)
         result.push_back(getNeighbour(m));
     return result;
@@ -24,12 +25,12 @@ auto State::getAllNeighbours() const -> std::vector<State>
 
 State State::getNeighbour(Move i_move) const
 {
-    return MoveUtils::move(Utils::getMatrixRepository().at(m_id), i_move);
+    return MoveUtils::move(MatrixRepository::getMatrix(m_id), i_move);
 }
 
 bool State::isSolution() const
 {
-    return SquareMatrixUtils::sorted(Utils::getMatrixRepository().at(m_id));
+    return SquareMatrixUtils::sorted(MatrixRepository::getMatrix(m_id));
 }
 
 void State::setPredecessor(State const& i_parent) const
@@ -44,29 +45,10 @@ auto State::getPredecessor() const -> MaybePredecessor
 
 SquareMatrix const& State::getMatrix() const
 {
-    return Utils::getMatrixRepository().at(m_id);
+    return MatrixRepository::getMatrix(m_id);
 }
 
 State::Id State::getId() const
 {
     return m_id;
-}
-
-namespace {
-
-Point expectedPosition(std::size_t const i_n, std::size_t const i_nbDimensions)
-{
-    return {i_n / i_nbDimensions, i_n % i_nbDimensions};
-}
-
-} // namespace anonymous
-
-std::size_t StateUtils::sortedness(State const& i_state)
-{
-    std::size_t result = 0;
-    const auto& matrix = Utils::getMatrixRepository().at(i_state.getId()).m_data;
-    for (std::size_t i = 0; i < matrix.size(); ++i)
-        for (std::size_t j = 0; j < matrix.size(); ++j)
-            result += PointUtils::distance({i, j}, expectedPosition(matrix[i][j], matrix.size()));
-    return result;
 }

@@ -1,6 +1,7 @@
 #include "Parser.hpp"
 #include "State.hpp"
 #include "Utils.hpp"
+#include "MatrixRepository.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -22,7 +23,7 @@ int main(int argc, char const** argv)
                              std::istreambuf_iterator<char>());
             const auto m = Parser::parse(query);
             const auto s = State(m);
-            std::cout << StateUtils::sortedness(s) << std::endl;
+            std::cout << MatrixRepository::getSortedness(s.getId()) << std::endl;
         }
     }
     catch (std::exception const& e)

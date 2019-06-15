@@ -3,15 +3,17 @@
 #include "ResultChecker.hpp"
 #include "Utils.hpp"
 #include "Move.hpp"
+#include "MatrixRepository.hpp"
 
 #include <fstream>
 #include <iostream>
 
 namespace {
 
-static constexpr auto g_enable_logging = true;
+static constexpr auto g_enable_logging_all_states = false;
+static constexpr auto g_enable_logging_iteration_time = false;
 static constexpr auto g_cout_progress = true;
-static constexpr auto g_iteration_limit = 1000;
+static constexpr auto g_iteration_limit = 10000;
 
 std::list<Move> collectMovesImpl(State const& i_state,
                                  State::MaybePredecessor const& i_opt_predecessor,
@@ -45,22 +47,68 @@ void dump(StateContainer const& i_container)
     if (ids.empty())
         g_log << "Empty" << std::endl << std::endl;
     for (auto id : ids)
-        g_log << SquareMatrixUtils::toString(Utils::getMatrixRepository().at(id)) << std::endl;
+        g_log << SquareMatrixUtils::toString(MatrixRepository::getMatrix(id)) << std::endl;
+}
+
+void log_initial(State const& i_state)
+{
+    if (g_enable_logging_all_states)
+    {
+        g_log << "=== Initial ===" << std::endl;
+        dump(i_state);
+    }
+}
+
+void logProgress(StateContainer const& i_opened_states, StateContainer const& i_closed_states, State const& i_e)
+{
+    static auto start = std::chrono::steady_clock::now();
+    if (g_cout_progress)
+    {
+        const auto end = std::chrono::steady_clock::now();
+        if (g_iteration_limit % 20 == 0)
+            std::cout << "Opened [" << i_opened_states.size() << "]        " <<
+                         "Closed: [" << i_closed_states.size() << "]       " <<
+                         "Sortedness: [" << MatrixRepository::getSortedness(i_e.getId()) << "       ]" <<
+                         "Iteration duration: [" << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() << "]" << '\r';
+        if (g_enable_logging_iteration_time)
+            g_log << std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() << std::endl;
+    }
+
+    if (g_enable_logging_all_states)
+        {
+            g_log << "=New iteration=" << std::endl << std::endl;
+
+            g_log << "Best" << std::endl;
+            dump(i_e);
+
+            g_log << "Opened" << std::endl;
+            dump(i_opened_states);
+
+            g_log << "Closed" << std::endl;
+            dump(i_closed_states);
+        }
+    start = std::chrono::steady_clock::now();
+}
+
+void throwIfIterationLimitExceeded()
+{
+    static std::size_t iteration_number = 0;
+    if (++iteration_number > g_iteration_limit)
+    {
+        iteration_number = 0;
+        throw std::runtime_error("Iteration limit exceeded");
+    }
 }
 
 } // namespace anonymous
 
 auto Solver::solve(State const& i_state) -> MaybeResult
 {
-    if (g_enable_logging)
-    {
-        g_log << "=== Initial ===" << std::endl;
-        dump(i_state);
-    }
+    log_initial(i_state);
     
     const auto flusher = Utils::ScopedCaller([]{
         Utils::getIdCounter() = 0;
-        Utils::getMatrixRepository().clear();
+        MatrixRepository::flush();
     });
 
     StateContainer opened_states;
@@ -68,33 +116,11 @@ auto Solver::solve(State const& i_state) -> MaybeResult
 
     opened_states.push(i_state);
 
-    auto iteration_number = std::size_t(0);
-
     while (!opened_states.empty())
     {
         const auto e = opened_states.getBestState();
 
-        if (g_cout_progress)
-        {
-            if (g_iteration_limit % 20 == 0)
-                std::cout << "Opened [" << opened_states.size() << "]        " <<
-                             "Closed: [" << closed_states.size() << "]       " <<
-                             "Sortedness: [" << StateUtils::sortedness(e) << "]" << '\r';
-        }
-
-        if (g_enable_logging)
-        {
-            g_log << "=New iteration=" << std::endl << std::endl;
-
-            g_log << "Best" << std::endl;
-            dump(e);
-
-            g_log << "Opened" << std::endl;
-            dump(opened_states);
-
-            g_log << "Closed" << std::endl;
-            dump(closed_states);
-        }
+        logProgress(opened_states, closed_states, e);
 
         if (e.isSolution())
             return std::make_shared<std::list<Move>>(collectMoves(e));
@@ -113,8 +139,7 @@ auto Solver::solve(State const& i_state) -> MaybeResult
             }
         }
 
-        if (++iteration_number > g_iteration_limit)
-            throw std::runtime_error("Iteration limit exceeded");
+        throwIfIterationLimitExceeded();
     }
     return {};
 }

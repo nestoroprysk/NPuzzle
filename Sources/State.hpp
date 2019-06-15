@@ -24,9 +24,3 @@ private:
     mutable MaybePredecessor m_opt_predecessor;
     std::size_t m_id = -1;
 };
-
-namespace StateUtils {
-
-    std::size_t sortedness(State const& i_state);
-
-} // namespace StateUtils

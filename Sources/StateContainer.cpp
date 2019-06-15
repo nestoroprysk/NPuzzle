@@ -1,7 +1,8 @@
 #include "StateContainer.hpp"
-
 #include "State.hpp"
 #include "Utils.hpp"
+#include "MatrixRepository.hpp"
+
 #include <string>
 
 void StateContainer::push(State i_state)
@@ -23,14 +24,11 @@ bool StateContainer::empty() const
 
 bool StateContainer::contains(State const& i_rhs) const
 {
-    const auto matrix = [](auto const i_id) -> SquareMatrix const&{
-        return Utils::getMatrixRepository().at(i_id);
-    };
-    const auto& rhs_matrix = matrix(i_rhs.getId());
+    const auto& rhs_matrix = MatrixRepository::getMatrix(i_rhs.getId());
     const auto range = m_states.equal_range(i_rhs);
     return std::any_of(range.first, range.second,
-        [&matrix, &rhs_matrix](auto const& i_e){
-            return matrix(i_e.getId()) == rhs_matrix;
+        [&rhs_matrix](auto const& i_e){
+            return MatrixRepository::getMatrix(i_e.getId()) == rhs_matrix;
     });
 }
 
